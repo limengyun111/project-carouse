@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./carouse1.css">
+  <script src="./static/react.development.js"></script>
+  <script src="./static/react-dom.development.js"></script>
+  <script src="./static/browser.min.js"></script>
+  <title>Carousel-map</title>
+  <style>
+   body{
+     background: rgb(214, 103, 12);
+   }
+  
+  </style>
+
+</head>
+<body>
+  <div id="root"></div>
+  
+
+
+<script type="text/babel">
+// 初始化将要使用的资源，比如图片，宽高
+
+const list = [
+  {
+    text:"./img/xiaomi.jpg",
+    href:"https://www.mi.com/index.html",
+  },
+  {
+    text:"./img/jingdong.jpeg",
+    href:"https://www.jd.com/",
+  },
+  {
+    text:"./img/meizu.jpg",
+    href:"https://www.meizu.com/",
+  },
+  {
+    text:"./img/taobao.jpg",
+    href:"https://www.taobao.com/",
+  },
+]
+const intervalTime = 2000
+const width = 500
+const height = 300
+const transitionTime = "2s"
+
+
+class Slider extends React.Component {
+  constructor(props){
+    super(props)
+  
+    this.state = {
+      index :1,
+    }
+    this.container = React.createRef()
+    this.imgWrapper = React.createRef()
+    this.list = this.props.list
+    this.list.push(this.props.list[0])
+ 
+  }
+  componentDidMount(){
+    if(!this.list) {
+  
+      return
+    } 
+      const count = this.list.length
+     
+      this.time = setTimeout(
+        this.loop.bind(this)
+      , this.props.intervalTime || 2000);
+
+      this.imgWrapper.current.addEventListener("transitionend",()=>{
+        this.time = setTimeout(
+        this.loop.bind(this)
+      , this.props.intervalTime || 2000);
+      if(this.state.index == count){
+        this.imgWrapper.current.style.transition = "0s"
+        this.imgWrapper.current.style.transform = "translateX(0px)"
+        this.state.index = 1
+      }
+
+      })
+
+  } 
+  loop(){
+    
+    if(this.state.index < this.list.length) {
+      this.imgWrapper.current.style.transition = this.props.transitonTime || "2s"
+     
+      this.imgWrapper.current.style.transform = "translateX(" +(-this.state.index * 100) +"vw)"
+
+      
+      this.setState(function (pervState) {
+        return {index:pervState.index + 1}
+      })
+        
+    }
+  }
+
+
+
+  render() {
+    return (
+     <div className="container" ref={this.container} 
+     style={{border:"5px solid",boxSizing:"border-box",width:"100vw",}}>
+      <div className="img-wrapper" ref={this.imgWrapper}
+     
+     >
+       {
+         this.list.map((item,idx) => {
+           return <img src={item.text} key={idx}
+            className="imgItem"
+            onClick={()=>{ window.open(item.href)}}
+          
+           />
+         })
+       }
+
+      </div>
+      <div className="dot">
+          {this.list.map((item,idx) => {
+            
+            if(idx == this.list.length - 1){
+              return null
+            }
+            if(idx === this.state.index - 1) {
+              
+              return <div className="yellow" key={idx}></div>
+            }
+            if((this.state.index === this.list.length) && idx===0) {
+              return <div className="yellow" key={idx}></div>
+            }
+            
+            
+            return <div key={idx} className="red"
+            onClick={ ()=>{ 
+              clearTimeout(this.time);
+              this.setState({index:idx})
+
+              this.time = setTimeout((this.loop.bind(this)),0)
+              }}
+            ></div>
+          })
+          
+          }
+      </div>
+     </div>
+
+    )
+  }
+ }
+
+
+ReactDOM.render(<div style={{width:"100vw",margin:"auto"}}>
+<Slider 
+list={list} intervalTime={intervalTime} 
+transitionTime={transitionTime}/></div>, 
+document.getElementById("root"))
+
+</script>
+
+
+
+
+  
+    
+</body>
+</html>
