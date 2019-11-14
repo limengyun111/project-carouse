@@ -4,12 +4,12 @@
   margin:auto;
  
 }
-/* .img-wrapper {
-  display: block;
-} */
-/* .img-item {
+.img-wrapper {
+  display: flex;
+}
+.img-item {
   height: 100%;
-} */
+}
 .dot{
   display: flex;
   position: absolute;
@@ -30,27 +30,3 @@
   background: red;
   margin-left:20px;
 }
-
-@media (max-width: 600px) {
- .img-wrapper{
-   width:500vw;
-   height:200px;
- }
- .imgItem{
-   width:100vw;
-   height: 200px;
- }
-
-}
-@media (min-width: 800px) {
-  .img-wrapper{
-    width:500vw;
-    height:400px;
-  }
-  .imgItem{
-    width:100vw;
-    height: 400px;
-  }
- 
- }
- 
